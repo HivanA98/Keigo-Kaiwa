@@ -153,3 +153,41 @@ body {
 .controls button:hover {
     background-color: var(--button-hover);
 }
+
+/* --- TATA LETAK MENU TEMA BAWAH --- */
+.theme-switcher-bottom {
+    position: fixed; 
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* Memastikan tombol selalu berada di lapisan teratas Sumbu Z */
+}
+
+/* --- ESTETIKA GLASSMORPHISM --- */
+.theme-switcher-bottom select {
+    appearance: none; /* Menghapus gaya default sistem operasi yang jelek */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    padding: 10px 20px;
+    border-radius: 30px; /* Membuat ujung membulat / pil */
+    background-color: rgba(20, 20, 20, 0.75);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    
+    /* Efek komputasi grafis: memburamkan latar belakang di balik tombol */
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Interaksi saat kursor berada di atas tombol */
+.theme-switcher-bottom select:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px); /* Animasi sedikit melayang */
+}
