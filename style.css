@@ -10,7 +10,7 @@
 /* TEMA 1: Kembang Api (Default) */
 body.theme-fireworks {
     /* Menggunakan gambar kembang api dari Unsplash */
-    --bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvgFf2inVt6k9_zP0lZziyVRfZpFwg6ma8w&s');
+    --bg-image: url('https://www.gotokyo.org/en/story/guide/fireworks-guide/images/main.webp');
     --text-heading-color: #eee;
     --button-bg: #ff4757; /* Warna merah agar kontras dengan malam */
     --button-hover: #e84118;
@@ -90,19 +90,44 @@ body {
 }
 
 .card-container {
-    width: 300px;
-    height: 200px;
+    /* Menggunakan persentase agar responsif di layar HP, tapi dibatasi maksimal 500px di layar PC */
+    width: 90%;
+    max-width: 500px; 
+    
+    /* Memperbesar tinggi kartu untuk mengakomodasi 3 baris teks panjang */
+    height: 350px; 
+    
     perspective: 1000px;
     margin: 20px auto;
 }
 
-.card {
+.card-face {
     width: 100%;
     height: 100%;
-    position: relative;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-    cursor: pointer;
+    position: absolute;
+    backface-visibility: hidden;
+    
+    display: flex;
+    flex-direction: column; /* Memastikan teks tersusun rapi dari atas ke bawah */
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 24px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+    padding: 30px; /* Menambah ruang kosong di pinggir dalam teks */
+    box-sizing: border-box;
+    
+    /* INI KUNCINYA: Jika teks masih kepanjangan, kartu akan memiliki scrollbar di dalamnya */
+    overflow-y: auto; 
+    
+    /* Menyembunyikan scrollbar bawaan yang jelek, tapi tetap bisa di-scroll */
+    scrollbar-width: none; /* Untuk Firefox */
+}
+
+/* Menyembunyikan scrollbar untuk Chrome/Safari/Edge */
+.card-face::-webkit-scrollbar {
+    display: none;
 }
 
 .card.is-flipped {
