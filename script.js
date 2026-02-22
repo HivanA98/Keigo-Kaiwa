@@ -85,10 +85,14 @@ btnNext.addEventListener('click', () => {
 muatDataCSV();
 
 // --- BAGIAN 2: Logika Pengubah Tema ---
+
 const themeSelect = document.getElementById('theme-select');
 const bodyElement = document.body;
 
+// Event listener untuk mendeteksi perubahan pada dropdown select
 themeSelect.addEventListener('change', (e) => {
-    bodyElement.classList.remove('theme-fireworks', 'theme-demonslayer');
-    bodyElement.classList.add(e.target.value);
+    // Solusi Dinamis: Menimpa seluruh class di <body> dengan value yang dipilih.
+    // Ini secara otomatis akan membuang tema lama dan memasang tema baru,
+    // berapapun jumlah tema yang Anda tambahkan di masa depan.
+    bodyElement.className = e.target.value;
 });
