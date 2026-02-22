@@ -1,22 +1,98 @@
-/* style.css */
+/* --- Definisi Variabel dan Tema --- */
+:root {
+    /* Variabel default (akan ditimpa oleh tema) */
+    --bg-image: none;
+    --text-heading-color: #ffffff;
+    --button-bg: #007bff;
+    --button-hover: #0056b3;
+}
+
+/* TEMA 1: Kembang Api (Default) */
+body.theme-fireworks {
+    /* Menggunakan gambar kembang api dari Unsplash */
+    --bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvgFf2inVt6k9_zP0lZziyVRfZpFwg6ma8w&s');
+    --text-heading-color: #eee;
+    --button-bg: #ff4757; /* Warna merah agar kontras dengan malam */
+    --button-hover: #e84118;
+}
+
+/* TEMA 2: Demon Slayer Style */
+body.theme-demonslayer {
+    /* ⚠️ GANTI URL DI BAWAH INI dengan URL gambar wallpaper Demon Slayer pilihan Anda.
+       Saat ini menggunakan gambar placeholder bernuansa Jepang gelap.
+    */
+    --bg-image: url('https://image.popbela.com/post/20240701/demon-slayer-anime-41be0b0f7a2e98c1f112c936e12c7454.jpg?tr=w-1200,f-webp,q-75&width=1200&format=webp&quality=75');
+    
+    --text-heading-color: #f0e68c; /* Warna khaki/emas */
+    --button-bg: #2c3e50; /* Biru tua gelap */
+    --button-hover: #1a252f;
+}
+/* ---------------------------------- */
+
+/* TEMA 2: Demon Slayer Style */
+body.theme-mountain {
+    /* ⚠️ GANTI URL DI BAWAH INI dengan URL gambar wallpaper Demon Slayer pilihan Anda.
+       Saat ini menggunakan gambar placeholder bernuansa Jepang gelap.
+    */
+    --bg-image: url('https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=1492&auto=format&fit=crop');
+    
+    --text-heading-color: #f0e68c; /* Warna khaki/emas */
+    --button-bg: #2c3e50; /* Biru tua gelap */
+    --button-hover: #1a252f;
+}
+/* ---------------------------------- */
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
+    flex-direction: column; /* Agar switcher ada di atas */
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f7f6;
+    min-height: 100vh; /* Menggunakan min-height agar background penuh */
     margin: 0;
+    
+    /* Properti Background Menyeluruh */
+    background-color: #1a1a1a; /* Warna cadangan jika gambar gagal dimuat */
+    background-image: var(--bg-image);
+    background-size: cover;      /* Memastikan gambar menutupi seluruh layar */
+    background-position: center; /* Gambar selalu di tengah */
+    background-attachment: fixed; /* Efek parallax: background diam saat di-scroll */
+    background-repeat: no-repeat;
+    
+    transition: background-image 0.5s ease-in-out; /* Efek transisi halus saat ganti tema */
+}
+
+/* Style untuk Menu Switcher Tema */
+.theme-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+}
+
+.theme-switcher select {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 4px;
 }
 
 .container {
     text-align: center;
+    /* Menambahkan sedikit latar belakang transparan agar konten lebih terbaca */
+    background-color: rgba(255, 255, 255, 0.1); 
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px); /* Efek blur di belakang container */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .card-container {
     width: 300px;
     height: 200px;
-    perspective: 1000px; /* Memberikan kedalaman 3D */
+    perspective: 1000px;
     margin: 20px auto;
 }
 
@@ -29,7 +105,6 @@ body {
     cursor: pointer;
 }
 
-/* Class tambahan yang akan dipicu oleh JavaScript */
 .card.is-flipped {
     transform: rotateY(180deg);
 }
@@ -38,13 +113,14 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
-    backface-visibility: hidden; /* Menyembunyikan sisi belakang saat tidak menghadap pengguna */
+    backface-visibility: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    /* Bayangan kartu lebih kuat agar menonjol dari background gelap */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
     padding: 20px;
     box-sizing: border-box;
 }
@@ -67,11 +143,13 @@ body {
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    /* Menggunakan variabel warna tombol dari tema */
+    background-color: var(--button-bg);
     color: white;
     transition: background 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .controls button:hover {
-    background-color: #0056b3;
+    background-color: var(--button-hover);
 }

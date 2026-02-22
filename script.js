@@ -1,4 +1,4 @@
-// Variabel array kosong yang nantinya akan diisi oleh data dari CSV
+// --- BAGIAN 1: Logika Flashcard & CSV (Sama seperti sebelumnya) ---
 let kaiwaData = [];
 let currentIndex = 0;
 
@@ -8,57 +8,56 @@ const cardBack = document.getElementById('card-back');
 const btnFlip = document.getElementById('btn-flip');
 const btnNext = document.getElementById('btn-next');
 
-// Fungsi asinkron untuk mengambil dan mem-parsing CSV
 async function muatDataCSV() {
     try {
-        // Melakukan HTTP GET Request ke file CSV di server (atau GitHub Pages)
         const response = await fetch('data.csv');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const dataTeks = await response.text();
         
-        // Algoritma Parsing Dasar: Memecah teks berdasarkan baris baru (Enter)
         const baris = dataTeks.split('\n');
         
-        // Loop dimulai dari indeks 1 untuk melewati baris pertama (header CSV)
+        kaiwaData = []; // Reset data
         for (let i = 1; i < baris.length; i++) {
-            // Membersihkan spasi/karakter kosong dan mengabaikan baris jika kosong
             if (baris[i].trim() === '') continue; 
-            
-            // Memecah setiap baris berdasarkan tanda koma
             const kolom = baris[i].split(',');
-            
-            // Mengkonstruksi objek data dan memasukkannya ke dalam array
-            kaiwaData.push({
-                kanji: kolom[0],
-                hiragana: kolom[1],
-                romaji: kolom[2],
-                arti: kolom[3]
-            });
+            // Validasi sederhana: pastikan ada cukup kolom
+            if(kolom.length >= 4) {
+                 kaiwaData.push({
+                    kanji: kolom[0],
+                    hiragana: kolom[1],
+                    romaji: kolom[2],
+                    arti: kolom[3]
+                });
+            }
         }
         
-        // Setelah proses parsing komputasi selesai, muat kartu pertama
-        loadCard();
+        if (kaiwaData.length > 0) {
+            loadCard();
+        } else {
+             cardFront.innerHTML = "Data CSV kosong.";
+        }
         
     } catch (error) {
-        console.error("Gagal memuat atau memproses CSV:", error);
-        cardFront.innerHTML = "Gagal memuat data dari server.";
+        console.error("Gagal memuat CSV:", error);
+        cardFront.innerHTML = "Gagal memuat data. Pastikan dijalankan di local server/GitHub Pages.";
     }
 }
 
 function loadCard() {
-    if (kaiwaData.length === 0) return; // Keamanan agar tidak error jika data kosong
+    if (kaiwaData.length === 0) return;
 
     const dataSaatIni = kaiwaData[currentIndex];
     
     cardFront.innerHTML = `
         <div style="text-align: center;">
-            <div style="font-size: 28px; margin-bottom: 5px;">${dataSaatIni.kanji}</div>
+            <div style="font-size: 28px; margin-bottom: 5px; font-weight: bold;">${dataSaatIni.kanji}</div>
             <div style="font-size: 18px; color: #555; margin-bottom: 5px;">${dataSaatIni.hiragana}</div>
             <div style="font-size: 16px; color: #888;">${dataSaatIni.romaji}</div>
         </div>
     `;
     
     cardBack.innerHTML = `
-        <div style="text-align: center;">
+        <div style="text-align: center; font-weight: 500;">
             <div style="font-size: 22px;">${dataSaatIni.arti}</div>
         </div>
     `;
@@ -66,12 +65,10 @@ function loadCard() {
     card.classList.remove('is-flipped'); 
 }
 
-// Logika pembalik kartu
 function flipCard() {
     card.classList.toggle('is-flipped');
 }
 
-// Event Listeners
 card.addEventListener('click', flipCard);
 btnFlip.addEventListener('click', flipCard);
 
@@ -82,5 +79,23 @@ btnNext.addEventListener('click', () => {
     }
 });
 
-// Panggil fungsi untuk memuat data CSV tepat saat skrip dijalankan
+// Panggil fungsi muat data saat pertama kali dijalankan
 muatDataCSV();
+
+
+// --- BAGIAN 2: Logika Pengubah Tema (BARU) ---
+
+const themeSelect = document.getElementById('theme-select');
+const bodyElement = document.body;
+
+// Event listener untuk mendeteksi perubahan pada dropdown select
+themeSelect.addEventListener('change', (e) => {
+    // 1. Ambil nilai tema yang dipilih (misal: 'theme-demonslayer')
+    const selectedTheme = e.target.value;
+
+    // 2. Hapus semua kemungkinan kelas tema yang ada sebelumnya agar tidak bertumpuk
+    bodyElement.classList.remove('theme-fireworks', 'theme-demonslayer', 'theme-mountain');
+
+    // 3. Tambahkan kelas tema yang baru dipilih ke tag <body>
+    bodyElement.classList.add(selectedTheme);
+});
