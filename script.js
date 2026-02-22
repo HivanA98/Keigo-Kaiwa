@@ -1,4 +1,4 @@
-// --- BAGIAN 1: Logika Flashcard & CSV (Sama seperti sebelumnya) ---
+// --- BAGIAN 1: Logika Flashcard & CSV ---
 let kaiwaData = [];
 let currentIndex = 0;
 
@@ -10,17 +10,20 @@ const btnNext = document.getElementById('btn-next');
 
 async function muatDataCSV() {
     try {
-        const response = await fetch('data.csv');
+        // Parameter { cache: 'no-store' } memaksa browser mengambil file terbaru dari server
+        const response = await fetch('data.csv', { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
         const dataTeks = await response.text();
         
-        const baris = dataTeks.split('\n');
+        // Membersihkan karakter \r bawaan Windows dan memecah per baris
+        const baris = dataTeks.replace(/\r/g, '').split('\n');
         
-        kaiwaData = []; // Reset data
+        kaiwaData = []; 
         for (let i = 1; i < baris.length; i++) {
             if (baris[i].trim() === '') continue; 
+            
             const kolom = baris[i].split(',');
-            // Validasi sederhana: pastikan ada cukup kolom
             if(kolom.length >= 4) {
                  kaiwaData.push({
                     kanji: kolom[0],
@@ -34,12 +37,12 @@ async function muatDataCSV() {
         if (kaiwaData.length > 0) {
             loadCard();
         } else {
-             cardFront.innerHTML = "Data CSV kosong.";
+             cardFront.innerHTML = "Data CSV kosong atau gagal dibaca.";
         }
         
     } catch (error) {
         console.error("Gagal memuat CSV:", error);
-        cardFront.innerHTML = "Gagal memuat data. Pastikan dijalankan di local server/GitHub Pages.";
+        cardFront.innerHTML = "Gagal memuat data. Periksa koneksi atau file CSV.";
     }
 }
 
@@ -50,15 +53,15 @@ function loadCard() {
     
     cardFront.innerHTML = `
         <div style="text-align: center;">
-            <div style="font-size: 28px; margin-bottom: 5px; font-weight: bold;">${dataSaatIni.kanji}</div>
-            <div style="font-size: 18px; color: #555; margin-bottom: 5px;">${dataSaatIni.hiragana}</div>
-            <div style="font-size: 16px; color: #888;">${dataSaatIni.romaji}</div>
+            <div style="font-size: 26px; margin-bottom: 5px; font-weight: bold;">${dataSaatIni.kanji}</div>
+            <div style="font-size: 16px; color: #555; margin-bottom: 5px;">${dataSaatIni.hiragana}</div>
+            <div style="font-size: 14px; color: #888;">${dataSaatIni.romaji}</div>
         </div>
     `;
     
     cardBack.innerHTML = `
         <div style="text-align: center; font-weight: 500;">
-            <div style="font-size: 22px;">${dataSaatIni.arti}</div>
+            <div style="font-size: 20px;">${dataSaatIni.arti}</div>
         </div>
     `;
     
@@ -79,23 +82,13 @@ btnNext.addEventListener('click', () => {
     }
 });
 
-// Panggil fungsi muat data saat pertama kali dijalankan
 muatDataCSV();
 
-
-// --- BAGIAN 2: Logika Pengubah Tema (BARU) ---
-
+// --- BAGIAN 2: Logika Pengubah Tema ---
 const themeSelect = document.getElementById('theme-select');
 const bodyElement = document.body;
 
-// Event listener untuk mendeteksi perubahan pada dropdown select
 themeSelect.addEventListener('change', (e) => {
-    // 1. Ambil nilai tema yang dipilih (misal: 'theme-demonslayer')
-    const selectedTheme = e.target.value;
-
-    // 2. Hapus semua kemungkinan kelas tema yang ada sebelumnya agar tidak bertumpuk
-    bodyElement.classList.remove('theme-fireworks', 'theme-demonslayer', 'theme-mountain');
-
-    // 3. Tambahkan kelas tema yang baru dipilih ke tag <body>
-    bodyElement.classList.add(selectedTheme);
+    bodyElement.classList.remove('theme-fireworks', 'theme-demonslayer');
+    bodyElement.classList.add(e.target.value);
 });
