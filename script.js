@@ -51,17 +51,23 @@ function loadCard() {
 
     const dataSaatIni = kaiwaData[currentIndex];
     
+    // Membungkus teks bagian depan dengan div struktural yang baru
     cardFront.innerHTML = `
-        <div style="text-align: center;">
-            <div style="font-size: 26px; margin-bottom: 5px; font-weight: bold;">${dataSaatIni.kanji}</div>
-            <div style="font-size: 16px; color: #555; margin-bottom: 5px;">${dataSaatIni.hiragana}</div>
-            <div style="font-size: 14px; color: #888;">${dataSaatIni.romaji}</div>
+        <div class="card-content-wrapper">
+            <div class="card-content-inner">
+                <div style="font-size: 26px; margin-bottom: 10px; font-weight: bold; line-height: 1.3;">${dataSaatIni.kanji}</div>
+                <div style="font-size: 16px; color: #555; margin-bottom: 5px;">${dataSaatIni.hiragana}</div>
+                <div style="font-size: 14px; color: #888;">${dataSaatIni.romaji}</div>
+            </div>
         </div>
     `;
     
+    // Membungkus teks bagian belakang (arti) dengan div struktural yang baru
     cardBack.innerHTML = `
-        <div style="text-align: center; font-weight: 500;">
-            <div style="font-size: 20px;">${dataSaatIni.arti}</div>
+        <div class="card-content-wrapper">
+            <div class="card-content-inner">
+                <div style="font-size: 20px; font-weight: 500; line-height: 1.4;">${dataSaatIni.arti}</div>
+            </div>
         </div>
     `;
     
